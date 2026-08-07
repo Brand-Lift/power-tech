@@ -53,13 +53,16 @@ const app = express();
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 // Allow requests from the frontend URL (and localhost in development).
+// Hardcoded GitHub Pages origin to ensure it's always allowed.
 const allowedOrigins = [
   process.env.FRONTEND_URL,        // e.g. https://yourusername.github.io
   'http://localhost:3000',
   'http://localhost:5500',
   'http://127.0.0.1:5500',
-  // add more if needed
+  'https://brand-lift.github.io',   // <-- DIRECTLY ADDED for your live site
 ].filter(Boolean); // remove empty/undefined values
+
+console.log('✅ Allowed CORS origins:', allowedOrigins);
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -67,6 +70,7 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.log(`❌ CORS blocked for origin: ${origin}`); // log blocked origins
       callback(new Error(`CORS blocked for origin: ${origin}`));
     }
   },
